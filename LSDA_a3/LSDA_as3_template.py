@@ -2,16 +2,18 @@ import pandas as pd
 import mlflow
 
 ## NOTE: You can use Microsoft Azure Machine Learning Studio for experiment tracking. Follow assignment description and uncomment below for that (you might also need to pip azureml (pip install azureml-core):
-#from azureml.core import Workspace
-#ws = Workspace.from_config()
-#mlflow.set_tracking_uri(ws.get_mlflow_tracking_uri())
+from azureml.core import Workspace
+##ws = Workspace.from_config()
+ws = Workspace(subscription_id = "aabeddb0-41f5-4bcc-85e9-94af5d2928f5", resource_group = "myVM_group", workspace_name = "workspace_name": "ML-ws", auth=None, _location=None, _disable_service_check=False, _workspace_id=None, sku='basic', tags=None, _cloud='AzureCloud')
+
+mlflow.set_tracking_uri(ws.get_mlflow_tracking_uri())
 
 ## NOTE: Optionally, you can use the public tracking server.  Do not use it for data you cannot afford to lose. See note in assignment text. If you leave this line as a comment, mlflow will save the runs to your local filesystem.
 
 # mlflow.set_tracking_uri("http://training.itu.dk:5000/")
 
 # TODO: Set the experiment name
-mlflow.set_experiment("<ITU Username> - <Descriptive experiment name>")
+mlflow.set_experiment("<carbr> - <1 experiment>")
 
 # Import some of the sklearn modules you are likely to use.
 from sklearn.pipeline import Pipeline
@@ -26,13 +28,47 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 # TODO: Set a descriptive name. This is optional, but makes it easier to keep track of your runs.
 with mlflow.start_run(run_name="<descriptive name>"):
     # TODO: Insert path to dataset
-    df = pd.read_json("path/to/dataset.json", orient="split")
+df = pd.read_json("/dataset.json", orient="split")
 
-    # TODO: Handle missing data
+##fit transform on dataframe returns a numpy array, so we cant call dropna on the returned dataframe, as it doesnt know the method.
 
-    pipeline = Pipeline([
-        # TODO: You can start with your pipeline from assignment 1
-    ])
+class MissingValues(BaseEstimator, TransformerMixin):
+    def fit(self,X,y=None):
+        return self
+    def transform(self,X,y=None):
+        df = pd.DataFrame(X)
+        df.dropna(inplace=True)
+        return df
+    
+class AddWindDirections(BaseEstimator, TransformerMixin):
+    def fit(self,X,y=None):
+        return self
+    def transform(self,X,y=None):
+        df = pd.DataFrame(X)
+        le = LabelEncoder()
+        directionsColumn = df["Direction"]
+        df["Direction"] = le.fit_transform(directionsColumn)        
+        return df
+        
+#now the data shouldve been correctly preproccesed. 
+##NOTE TO SELF: we could try to handle missing values differently? 
+##Another could be to try hot label encoder instead of label encoder
+##Different regression models of.
+##What about a different scaler? is that a thing?
+##Mean Squared Error (MSE). Root Mean Squared Error (RMSE). Mean Absolute Error (MAE). These are the three error metrics
+#most commonly used to evaluate performance of a regression model. - what about r2 score? 
+##Estimator score method: Estimators have a score method providing a default evaluation criterion for the problem they are designed to solve
+#https://scikit-learn.org/stable/modules/model_evaluation.html
+##
+      
+    ##
+    
+    pipeline = Pipeline(steps=[
+                           ('MissingValues',MissingValues()),
+                           ('AddWindDirections',AddWindDirections()),
+                           ('Scaler', MinMaxScaler()),
+                           ('RegModel', LinearRegression())
+                        ])
 
     # TODO: Currently the only metric is MAE. You should add more. What other metrics could you use? Why?
     metrics = [
