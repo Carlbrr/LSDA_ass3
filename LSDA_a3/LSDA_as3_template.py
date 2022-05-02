@@ -63,46 +63,40 @@ class AddWindDirections(BaseEstimator, TransformerMixin):
 ##Estimator score method: Estimators have a score method providing a default evaluation criterion for the problem they are designed to solve
 #https://scikit-learn.org/stable/modules/model_evaluation.html
 ##
-      
-    ##
-    
-    pipeline = Pipeline(steps=[
-                           ('MissingValues',MissingValues()),
-                           ('AddWindDirections',AddWindDirections()),
-                           ('Scaler', MinMaxScaler()),
-                           ('RegModel', LinearRegression())])
 
-    # TODO: Currently the only metric is MAE. You should add more. What other metrics could you use? Why?
-    metrics = [
-        ("MAE", mean_absolute_error, []),
-    ]
+pipeline = Pipeline(steps=[('MissingValues',MissingValues()),('AddWindDirections',AddWindDirections()),('Scaler', MinMaxScaler()),('RegModel', LinearRegression())])
 
-    X = df[["Speed","Direction"]]
-    y = df["Total"]
+# TODO: Currently the only metric is MAE. You should add more. What other metrics could you use? Why?
+metrics = [
+    ("MAE", mean_absolute_error, []),
+]
 
-    number_of_splits = 5
+X = df[["Speed","Direction"]]
+y = df["Total"]
 
-    #TODO: Log your parameters. What parameters are important to log?
-    #HINT: You can get access to the transformers in your pipeline using `pipeline.steps`
-    
-    for train, test in TimeSeriesSplit(number_of_splits).split(X,y):
-        pipeline.fit(X.iloc[train],y.iloc[train])
-        predictions = pipeline.predict(X.iloc[test])
-        truth = y.iloc[test]
+number_of_splits = 5
 
-        from matplotlib import pyplot as plt 
-        plt.plot(truth.index, truth.values, label="Truth")
-        plt.plot(truth.index, predictions, label="Predictions")
-        plt.show()
-        
-        # Calculate and save the metrics for this fold
-        for name, func, scores in metrics:
-            score = func(truth, predictions)
-            scores.append(score)
-    
-    # Log a summary of the metrics
-    for name, _, scores in metrics:
-            # NOTE: Here we just log the mean of the scores. 
-            # Are there other summarizations that could be interesting?
-            mean_score = sum(scores)/number_of_splits
-            mlflow.log_metric(f"mean_{name}", mean_score)
+#TODO: Log your parameters. What parameters are important to log?
+#HINT: You can get access to the transformers in your pipeline using `pipeline.steps`
+
+for train, test in TimeSeriesSplit(number_of_splits).split(X,y):
+    pipeline.fit(X.iloc[train],y.iloc[train])
+    predictions = pipeline.predict(X.iloc[test])
+    truth = y.iloc[test]
+
+    from matplotlib import pyplot as plt 
+    plt.plot(truth.index, truth.values, label="Truth")
+    plt.plot(truth.index, predictions, label="Predictions")
+    plt.show()
+
+    # Calculate and save the metrics for this fold
+    for name, func, scores in metrics:
+        score = func(truth, predictions)
+        scores.append(score)
+
+# Log a summary of the metrics
+for name, _, scores in metrics:
+        # NOTE: Here we just log the mean of the scores. 
+        # Are there other summarizations that could be interesting?
+        mean_score = sum(scores)/number_of_splits
+        mlflow.log_metric(f"mean_{name}", mean_score)
