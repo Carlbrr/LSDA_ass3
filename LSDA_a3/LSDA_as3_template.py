@@ -28,7 +28,7 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 # TODO: Set a descriptive name. This is optional, but makes it easier to keep track of your runs.
 with mlflow.start_run(run_name="<descriptive name>"):
     # TODO: Insert path to dataset
-    df = pd.read_json("/dataset.json", orient="split")
+    df = pd.read_json("../dataset.json", orient="split")
 
 ##fit transform on dataframe returns a numpy array, so we cant call dropna on the returned dataframe, as it doesnt know the method.
 
