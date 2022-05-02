@@ -76,7 +76,7 @@ metrics = [
 X = df[["Speed","Direction"]]
 y = df["Total"]
 
-number_of_splits = 5
+number_of_splits = 2
 
 #TODO: Log your parameters. What parameters are important to log?
 #HINT: You can get access to the transformers in your pipeline using `pipeline.steps`
