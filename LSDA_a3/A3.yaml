@@ -1,4 +1,4 @@
-name: PolyReg
+name: A3
 channels:
   - defaults
 dependencies:
