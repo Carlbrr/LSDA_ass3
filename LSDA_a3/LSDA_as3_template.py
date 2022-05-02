@@ -26,7 +26,7 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 
 # Start a run
 # TODO: Set a descriptive name. This is optional, but makes it easier to keep track of your runs.
-with mlflow.start_run(run_name="<descriptive name>"):
+with mlflow.start_run(run_name="<testing1>"):
     # TODO: Insert path to dataset
     df = pd.read_json("/dataset.json", orient="split")
 
