@@ -9,3 +9,4 @@ dependencies:
   - pip:
     - mlflow
     - matplotlib>3
+    - azureml-core
