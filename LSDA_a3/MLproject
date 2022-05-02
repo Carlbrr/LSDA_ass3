@@ -1,6 +1,6 @@
-name: PolyReg
+name: A3
 
-conda_env: PolyReg.yaml
+conda_env: A3.yaml
 
 entry_points:
   main:
