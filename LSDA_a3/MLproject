@@ -4,5 +4,4 @@ conda_env: PolyReg.yaml
 
 entry_points:
   main:
-    parameters:
     command: "python LSDA_as3_template.py"
