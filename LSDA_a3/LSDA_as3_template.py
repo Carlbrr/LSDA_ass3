@@ -40,7 +40,9 @@ class MissingValues(BaseEstimator, TransformerMixin):
         df = pd.DataFrame(X)
         df.dropna(inplace=True)
         return df
-    
+
+#wind directions
+
 class AddWindDirections(BaseEstimator, TransformerMixin):
     def fit(self,X,y=None):
         return self
@@ -68,8 +70,7 @@ class AddWindDirections(BaseEstimator, TransformerMixin):
                            ('MissingValues',MissingValues()),
                            ('AddWindDirections',AddWindDirections()),
                            ('Scaler', MinMaxScaler()),
-                           ('RegModel', LinearRegression())
-                        ])
+                           ('RegModel', LinearRegression())])
 
     # TODO: Currently the only metric is MAE. You should add more. What other metrics could you use? Why?
     metrics = [
