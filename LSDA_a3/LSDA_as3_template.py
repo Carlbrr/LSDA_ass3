@@ -6,7 +6,7 @@ from azureml.core import Workspace
 ##ws = Workspace.from_config()
 ws = Workspace(subscription_id = "aabeddb0-41f5-4bcc-85e9-94af5d2928f5", resource_group = "myVM_group", workspace_name = "ML-ws", auth=None, _location=None, _disable_service_check=False, _workspace_id=None, sku='basic', tags=None, _cloud='AzureCloud')
 
-#mlflow.set_tracking_uri(ws.get_mlflow_tracking_uri()) #uncomment
+mlflow.set_tracking_uri(ws.get_mlflow_tracking_uri()) #uncomment
 
 ## NOTE: Optionally, you can use the public tracking server.  Do not use it for data you cannot afford to lose. See note in assignment text. If you leave this line as a comment, mlflow will save the runs to your local filesystem.
 
@@ -32,6 +32,16 @@ from sklearn.preprocessing import LabelEncoder
 with mlflow.start_run(run_name="<testing>"):
     # TODO: Insert path to dataset
     df = pd.read_json("./dataset.json", orient="split")
+##label encode the directions first, such that we can get a mean of the directions, as we will loose data if we try to mea
+#n string values.
+labelEnconder = LabelEncoder()
+dirColumn = df["Direction"]
+df["Direction"] = labelEnconder.fit_transform(dirColumn) 
+
+
+##group by 3H time interval
+df = pd.DataFrame(df.groupby("Source_time").mean(), columns=df.columns)
+df = df.drop(['Source_time'], axis= 1)
 
 ##fit transform on dataframe returns a numpy array, so we cant call dropna on the returned dataframe, as it doesnt know the method.
 
