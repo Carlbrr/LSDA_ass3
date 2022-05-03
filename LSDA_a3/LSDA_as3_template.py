@@ -6,7 +6,7 @@ from azureml.core import Workspace
 ##ws = Workspace.from_config()
 ws = Workspace(subscription_id = "aabeddb0-41f5-4bcc-85e9-94af5d2928f5", resource_group = "myVM_group", workspace_name = "ML-ws", auth=None, _location=None, _disable_service_check=False, _workspace_id=None, sku='basic', tags=None, _cloud='AzureCloud')
 
-mlflow.set_tracking_uri(ws.get_mlflow_tracking_uri()) #uncomment
+#mlflow.set_tracking_uri(ws.get_mlflow_tracking_uri()) #uncomment
 
 ## NOTE: Optionally, you can use the public tracking server.  Do not use it for data you cannot afford to lose. See note in assignment text. If you leave this line as a comment, mlflow will save the runs to your local filesystem.
 
