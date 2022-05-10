@@ -16,8 +16,9 @@ from azureml.core import Workspace
 ws = Workspace.from_config()
 
 mlflow.set_tracking_uri(ws.get_mlflow_tracking_uri())
-import os
-os.environ[MLFLOW_TRACKING_URI] = ws.get_mlflow_tracking_uri() ##"azureml://japaneast.api.azureml.ms/mlflow/v1.0/subscriptions/aabeddb0-41f5-4bcc-85e9-94af5d2928f5/resourceGroups/myVM_group/providers/Microsoft.MachineLearningServices/workspaces/ML-ws"
+#import os
+#os.environ[MLFLOW_TRACKING_URI] = ws.get_mlflow_tracking_uri() ##"azureml://japaneast.api.azureml.ms/mlflow/v1.0/subscriptions/aabeddb0-41f5-4bcc-85e9-94af5d2928f5/resourceGroups/myVM_group/providers/Microsoft.MachineLearningServices/workspaces/ML-ws"
+
 print(ws.get_mlflow_tracking_uri())
 
 #mlflow.set_tracking_uri("azureml://japaneast.api.azureml.ms/mlflow/v1.0/subscriptions/aabeddb0-41f5-4bcc-85e9-94af5d2928f5/resourceGroups/myVM_group/providers/Microsoft.MachineLearningServices/workspaces/ML-ws") #uncomment
