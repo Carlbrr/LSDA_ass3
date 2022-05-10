@@ -21,7 +21,7 @@ ws = Workspace(subscription_id = "aabeddb0-41f5-4bcc-85e9-94af5d2928f5", resourc
 mlflow.set_tracking_uri("https://training.itu.dk:5000/")
 
 # TODO: Set the experiment name
-mlflow.set_experiment("first")
+mlflow.set_experiment("carbrTest")
 
 # Import some of the sklearn modules you are likely to use.
 from sklearn.pipeline import Pipeline
