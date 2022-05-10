@@ -37,7 +37,7 @@ from sklearn.preprocessing import LabelEncoder
 
 # Start a run
 # TODO: Set a descriptive name. This is optional, but makes it easier to keep track of your runs.
-with mlflow.start_run(run_name="firstTest"):
+with mlflow.start_run(run_name="firstTest") as mlflow_run: #??
     # TODO: Insert path to dataset
     df = pd.read_json("./dataset.json", orient="split")
 ##label encode the directions first, such that we can get a mean of the directions, as we will loose data if we try to mea
