@@ -4,6 +4,11 @@ import mlflow
 ## NOTE: You can use Microsoft Azure Machine Learning Studio for experiment tracking. Follow assignment description and uncomment below for that (you might also need to pip azureml (pip install azureml-core):
 from azureml.core import Workspace
 
+import os
+os.environ[MLFLOW_TRACKING_URI] = "https://training.itu.dk:5000/"
+
+
+
 ##setup interactive athentication
 #from azureml.core.authentication import InteractiveLoginAuthentication
 #ia = InteractiveLoginAuthentication(tenant_id='bea229b6-7a08-4086-b44c-71f57f716bdb')
