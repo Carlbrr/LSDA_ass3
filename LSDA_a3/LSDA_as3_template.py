@@ -21,7 +21,7 @@ mlflow.set_tracking_uri("azureml://japaneast.api.azureml.ms/mlflow/v1.0/subscrip
 #mlflow.set_tracking_uri("https://training.itu.dk:5000/")
 
 # TODO: Set the experiment name
-mlflow.set_experiment("SecondTest")
+mlflow.set_experiment("first")
 
 # Import some of the sklearn modules you are likely to use.
 from sklearn.pipeline import Pipeline
@@ -37,7 +37,7 @@ from sklearn.preprocessing import LabelEncoder
 
 # Start a run
 # TODO: Set a descriptive name. This is optional, but makes it easier to keep track of your runs.
-with mlflow.start_run(run_name="first"):
+with mlflow.start_run(run_name="firstTest"):
     # TODO: Insert path to dataset
     df = pd.read_json("./dataset.json", orient="split")
 ##label encode the directions first, such that we can get a mean of the directions, as we will loose data if we try to mea
