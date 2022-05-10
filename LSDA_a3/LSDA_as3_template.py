@@ -4,18 +4,23 @@ import mlflow
 ## NOTE: You can use Microsoft Azure Machine Learning Studio for experiment tracking. Follow assignment description and uncomment below for that (you might also need to pip azureml (pip install azureml-core):
 from azureml.core import Workspace
 
-import os
-os.environ[MLFLOW_TRACKING_URI] = "azureml://japaneast.api.azureml.ms/mlflow/v1.0/subscriptions/aabeddb0-41f5-4bcc-85e9-94af5d2928f5/resourceGroups/myVM_group/providers/Microsoft.MachineLearningServices/workspaces/ML-ws"
 
 ##setup interactive athentication
 #from azureml.core.authentication import InteractiveLoginAuthentication
 #ia = InteractiveLoginAuthentication(tenant_id='bea229b6-7a08-4086-b44c-71f57f716bdb')
 
 ##ws = Workspace.from_config()
-ws = Workspace(subscription_id = "aabeddb0-41f5-4bcc-85e9-94af5d2928f5", resource_group = "myVM_group", workspace_name = "ML-ws", auth=None, _location=None, _disable_service_check=False, _workspace_id=None, sku='basic', tags=None, _cloud='AzureCloud')
+#ws = Workspace(subscription_id = "aabeddb0-41f5-4bcc-85e9-94af5d2928f5", resource_group = "myVM_group", workspace_name = "ML-ws", auth=None, _location=None, _disable_service_check=False, _workspace_id=None, sku='basic', tags=None, _cloud='AzureCloud')
 #print(ws)
+import os
+os.environ[MLFLOW_TRACKING_URI] = "azureml://japaneast.api.azureml.ms/mlflow/v1.0/subscriptions/aabeddb0-41f5-4bcc-85e9-94af5d2928f5/resourceGroups/myVM_group/providers/Microsoft.MachineLearningServices/workspaces/ML-ws"
 
-mlflow.set_tracking_uri("azureml://japaneast.api.azureml.ms/mlflow/v1.0/subscriptions/aabeddb0-41f5-4bcc-85e9-94af5d2928f5/resourceGroups/myVM_group/providers/Microsoft.MachineLearningServices/workspaces/ML-ws") #uncomment
+ws = Workspace.from_config()
+
+mlflow.set_tracking_uri(ws.get_mlflow_tracking_uri())
+
+
+#mlflow.set_tracking_uri("azureml://japaneast.api.azureml.ms/mlflow/v1.0/subscriptions/aabeddb0-41f5-4bcc-85e9-94af5d2928f5/resourceGroups/myVM_group/providers/Microsoft.MachineLearningServices/workspaces/ML-ws") #uncomment
 
 #print(ws.get_mlflow_tracking_uri())
 
