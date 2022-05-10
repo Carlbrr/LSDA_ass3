@@ -119,7 +119,7 @@ with mlflow.start_run(run_name="firstTest"):
 
     # Log a summary of the metrics
     for name, _, scores in metrics:
-            # NOTE: Here we just log the mean of the scores. 
-            # Are there other summarizations that could be interesting?
-            mean_score = sum(scores)/number_of_splits
-            mlflow.log_metric(f"mean_{name}", mean_score)
+        # NOTE: Here we just log the mean of the scores. 
+        # Are there other summarizations that could be interesting?
+        mean_score = sum(scores)/number_of_splits
+        mlflow.log_metric(f"mean_{name}", mean_score)
