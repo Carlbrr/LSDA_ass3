@@ -22,7 +22,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.svm import SVR
 from sklearn.model_selection import TimeSeriesSplit
-from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score, root_squared_error
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.preprocessing import LabelEncoder
@@ -82,7 +82,6 @@ with mlflow.start_run(run_name="firstTest"):
     metrics = [
         ("MAE", mean_absolute_error, []),
         ("MSE", mean_squared_error, []),
-        ("RMSE", root_mean_squared_error, []),
         ("R2", r2_score, []),
     ]
 
