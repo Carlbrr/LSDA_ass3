@@ -45,81 +45,81 @@ with mlflow.start_run(run_name="firstTest"):
     df = pd.read_json("./dataset.json", orient="split")
 ##label encode the directions first, such that we can get a mean of the directions, as we will loose data if we try to mea
 #n string values.
-labelEnconder = LabelEncoder()
-dirColumn = df["Direction"]
-df["Direction"] = labelEnconder.fit_transform(dirColumn) 
+    labelEnconder = LabelEncoder()
+    dirColumn = df["Direction"]
+    df["Direction"] = labelEnconder.fit_transform(dirColumn) 
 
 
 ##group by 3H time interval
-df = pd.DataFrame(df.groupby("Source_time").mean(), columns=df.columns)
-df = df.drop(['Source_time'], axis= 1)
+    df = pd.DataFrame(df.groupby("Source_time").mean(), columns=df.columns)
+    df = df.drop(['Source_time'], axis= 1)
 
 ##fit transform on dataframe returns a numpy array, so we cant call dropna on the returned dataframe, as it doesnt know the method.
 
-class MissingValues(BaseEstimator, TransformerMixin):
-    def fit(self,X,y=None):
-        return self
-    def transform(self,X,y=None):
-        df = pd.DataFrame(X)
-        df.dropna(inplace=True)
-        return df
+    class MissingValues(BaseEstimator, TransformerMixin):
+        def fit(self,X,y=None):
+            return self
+        def transform(self,X,y=None):
+            df = pd.DataFrame(X)
+            df.dropna(inplace=True)
+            return df
 
-#wind directions
+    #wind directions
 
-class AddWindDirections(BaseEstimator, TransformerMixin):
-    def fit(self,X,y=None):
-        return self
-    def transform(self,X,y=None):
-        df = pd.DataFrame(X)
-        le = LabelEncoder()
-        directionsColumn = df["Direction"]
-        df["Direction"] = le.fit_transform(directionsColumn)        
-        return df
-        
-#now the data shouldve been correctly preproccesed. 
-##NOTE TO SELF: we could try to handle missing values differently? 
-##Another could be to try hot label encoder instead of label encoder
-##Different regression models of.
-##What about a different scaler? is that a thing?
-##Mean Squared Error (MSE). Root Mean Squared Error (RMSE). Mean Absolute Error (MAE). These are the three error metrics
-#most commonly used to evaluate performance of a regression model. - what about r2 score? 
-##Estimator score method: Estimators have a score method providing a default evaluation criterion for the problem they are designed to solve
-#https://scikit-learn.org/stable/modules/model_evaluation.html
-##
+    class AddWindDirections(BaseEstimator, TransformerMixin):
+        def fit(self,X,y=None):
+            return self
+        def transform(self,X,y=None):
+            df = pd.DataFrame(X)
+            le = LabelEncoder()
+            directionsColumn = df["Direction"]
+            df["Direction"] = le.fit_transform(directionsColumn)        
+            return df
 
-pipeline = Pipeline(steps=[('MissingValues',MissingValues()),('AddWindDirections',AddWindDirections()),('Scaler', MinMaxScaler()),('RegModel', LinearRegression())])
+    #now the data shouldve been correctly preproccesed. 
+    ##NOTE TO SELF: we could try to handle missing values differently? 
+    ##Another could be to try hot label encoder instead of label encoder
+    ##Different regression models of.
+    ##What about a different scaler? is that a thing?
+    ##Mean Squared Error (MSE). Root Mean Squared Error (RMSE). Mean Absolute Error (MAE). These are the three error metrics
+    #most commonly used to evaluate performance of a regression model. - what about r2 score? 
+    ##Estimator score method: Estimators have a score method providing a default evaluation criterion for the problem they are designed to solve
+    #https://scikit-learn.org/stable/modules/model_evaluation.html
+    ##
 
-# TODO: Currently the only metric is MAE. You should add more. What other metrics could you use? Why?
-metrics = [
-    ("MAE", mean_absolute_error, []),
-]
+    pipeline = Pipeline(steps=[('MissingValues',MissingValues()),('AddWindDirections',AddWindDirections()),('Scaler', MinMaxScaler()),('RegModel', LinearRegression())])
 
-X = df[["Speed","Direction"]]
-y = df["Total"]
+    # TODO: Currently the only metric is MAE. You should add more. What other metrics could you use? Why?
+    metrics = [
+        ("MAE", mean_absolute_error, []),
+    ]
 
-number_of_splits = 2
+    X = df[["Speed","Direction"]]
+    y = df["Total"]
 
-#TODO: Log your parameters. What parameters are important to log?
-#HINT: You can get access to the transformers in your pipeline using `pipeline.steps`
+    number_of_splits = 2
 
-for train, test in TimeSeriesSplit(number_of_splits).split(X,y):
-    pipeline.fit(X.iloc[train],y.iloc[train])
-    predictions = pipeline.predict(X.iloc[test])
-    truth = y.iloc[test]
+    #TODO: Log your parameters. What parameters are important to log?
+    #HINT: You can get access to the transformers in your pipeline using `pipeline.steps`
 
-    from matplotlib import pyplot as plt 
-    plt.plot(truth.index, truth.values, label="Truth")
-    plt.plot(truth.index, predictions, label="Predictions")
-    plt.show()
+    for train, test in TimeSeriesSplit(number_of_splits).split(X,y):
+        pipeline.fit(X.iloc[train],y.iloc[train])
+        predictions = pipeline.predict(X.iloc[test])
+        truth = y.iloc[test]
 
-    # Calculate and save the metrics for this fold
-    for name, func, scores in metrics:
-        score = func(truth, predictions)
-        scores.append(score)
+        from matplotlib import pyplot as plt 
+        plt.plot(truth.index, truth.values, label="Truth")
+        plt.plot(truth.index, predictions, label="Predictions")
+        plt.show()
 
-# Log a summary of the metrics
-for name, _, scores in metrics:
-        # NOTE: Here we just log the mean of the scores. 
-        # Are there other summarizations that could be interesting?
-        mean_score = sum(scores)/number_of_splits
-        mlflow.log_metric(f"mean_{name}", mean_score)
+        # Calculate and save the metrics for this fold
+        for name, func, scores in metrics:
+            score = func(truth, predictions)
+            scores.append(score)
+
+    # Log a summary of the metrics
+    for name, _, scores in metrics:
+            # NOTE: Here we just log the mean of the scores. 
+            # Are there other summarizations that could be interesting?
+            mean_score = sum(scores)/number_of_splits
+            mlflow.log_metric(f"mean_{name}", mean_score)
