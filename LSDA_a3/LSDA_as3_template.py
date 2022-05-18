@@ -13,7 +13,7 @@ mlflow.set_tracking_uri(ws.get_mlflow_tracking_uri())
 ## NOTE: Optionally, you can use the public tracking server.  Do not use it for data you cannot afford to lose. See note in assignment text. If you leave this line as a comment, mlflow will save the runs to your local filesystem.
 
 # TODO: Set the experiment name
-mlflow.set_experiment("testMetrics")
+mlflow.set_experiment("randomForest_splits")
 
 # Import some of the sklearn modules you are likely to use.
 from sklearn.pipeline import Pipeline
@@ -30,7 +30,7 @@ from sklearn.ensemble import RandomForestRegressor
 
 # Start a run
 # TODO: Set a descriptive name. This is optional, but makes it easier to keep track of your runs.
-with mlflow.start_run(run_name="R2_MAE_MSE_metrics"):
+with mlflow.start_run(run_name="two_splits_minMaxScale"):
     # TODO: Insert path to dataset
     df = pd.read_json("./dataset.json", orient="split")
 ##label encode the directions first, such that we can get a mean of the directions, as we will loose data if we try to mea
