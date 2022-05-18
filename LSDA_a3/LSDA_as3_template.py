@@ -26,6 +26,7 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.preprocessing import LabelEncoder
+from sklearn.ensemble import RandomForestRegressor
 
 # Start a run
 # TODO: Set a descriptive name. This is optional, but makes it easier to keep track of your runs.
@@ -76,7 +77,7 @@ with mlflow.start_run(run_name="R2_MAE_MSE_metrics"):
     #https://scikit-learn.org/stable/modules/model_evaluation.html
     ##
 
-    pipeline = Pipeline(steps=[('MissingValues',MissingValues()),('AddWindDirections',AddWindDirections()),('Scaler', MinMaxScaler()),('RegModel', LinearRegression())])
+    pipeline = Pipeline(steps=[('MissingValues',MissingValues()),('AddWindDirections',AddWindDirections()),('Scaler', MinMaxScaler()),('RegModel', RandomForestRegressor())])
 
     # TODO: Currently the only metric is MAE. You should add more. What other metrics could you use? Why?
     metrics = [
@@ -113,4 +114,5 @@ with mlflow.start_run(run_name="R2_MAE_MSE_metrics"):
         # NOTE: Here we just log the mean of the scores. 
         # Are there other summarizations that could be interesting?
         mean_score = sum(scores)/number_of_splits
-        mlflow.log_metric(f"mean_{name}", mean_score)
+        mlflow.log_metric(f"{name}", mean_score)
+    mlflow.log_param("nr_splits", 2)
