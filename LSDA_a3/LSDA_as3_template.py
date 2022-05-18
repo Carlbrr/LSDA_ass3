@@ -82,7 +82,6 @@ with mlflow.start_run(run_name="two_splits_minMaxScale"):
     # TODO: Currently the only metric is MAE. You should add more. What other metrics could you use? Why?
     metrics = [
         ("MAE", mean_absolute_error, []),
-        ("MSE", mean_squared_error, []),
         ("R2", r2_score, []),
     ]
 
