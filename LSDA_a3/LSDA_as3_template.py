@@ -13,7 +13,7 @@ mlflow.set_tracking_uri(ws.get_mlflow_tracking_uri())
 ## NOTE: Optionally, you can use the public tracking server.  Do not use it for data you cannot afford to lose. See note in assignment text. If you leave this line as a comment, mlflow will save the runs to your local filesystem.
 
 # TODO: Set the experiment name
-mlflow.set_experiment("randomForest_splits_encoder")
+mlflow.set_experiment("randomForestSplitsAndEncoder")
 
 # Import some of the sklearn modules you are likely to use.
 from sklearn.pipeline import Pipeline
